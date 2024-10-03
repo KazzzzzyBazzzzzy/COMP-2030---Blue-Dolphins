@@ -1,6 +1,13 @@
-// base project file
 
-//I hope this all works okay lmao
-
-
-//trying to push the first time
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Bailey Boyd, " />
+    <title>SMD Web Solution Index</title>
+</head>
+<body>
+    
+</body>
+</html>
