@@ -1,0 +1,51 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+body {
+    /* Set page colour */
+    background-color: darkgray;
+
+    /* Set to middle top of screen */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+#page-select ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+#page-select li {
+    display: inline;
+}
+
+#page-select a {
+    text-decoration: none;
+}
+
+#page-select a button {
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+}
+
+#page-select a button:hover {
+    background-color: #3e8e41;
+}
+
+
+
+
