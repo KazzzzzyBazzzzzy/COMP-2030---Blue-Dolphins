@@ -1,11 +1,10 @@
 # SMD Database Setup
 
-The `factory_log` table and the `smd_database` database are created by this SQL script. When importing raw data into the database, it is stored in the table.
+This SQL script creates a database called `smd_database` and a table called `factory_log`. The table is used to store raw data when imported into the database.
 
 ## Important Notes
 
-- The `factory_log` and `smd_database` tables that this script generates are used for data structure.
-- **The real database is on your XAMPP server.** This is not the real database.
+- The `smd_database` and `factory_log` table created by this script are for data structuring purposes.
+- **This is not the actual database.** The actual database exists on your XAMPP server.
 
-
-Use XAMPP to import the SQL file into the appropriate environment so that you may connect to the actual database.
+Make sure you import the SQL file into the correct environment using XAMPP to connect to the real database.
