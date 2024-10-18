@@ -21,15 +21,15 @@ body {
     gap: 10px;
 }
 
-#page-select li {
+#page-select li, #admin-select li, #auditor-select li, #factory-manager-select li, #production-operator-select li  {
     display: inline;
 }
 
-#page-select a {
+#page-select a, #admin-select a, #auditor-select a, #factory-manager-select a, #production-operator-select a  {
     text-decoration: none;
 }
 
-#page-select a button {
+#page-select a button, #admin-select a button, #auditor-select a button, #factory-manager-select a button, #production-operator-select a button {
     font-size: 16px;
     padding: 10px 20px;
     cursor: pointer;
@@ -42,7 +42,7 @@ body {
     border-radius: 15px;
 }
 
-#page-select a button:hover {
+#page-select a button:hover, #admin-select a button:hover, #auditor-select a button:hover, #factory-manager-select a button:hover, #production-operator-select a button:hover {
     background-color: #3e8e41;
 }
 
