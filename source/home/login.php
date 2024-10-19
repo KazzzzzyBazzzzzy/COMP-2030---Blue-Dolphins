@@ -46,13 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function getDashboardUrl($role) {
     switch (strtolower($role)) {
         case 'admin':
-            return '../administrator/administrator.html';
+            return '../administrator/administrator.php';
         case 'factorymanager':
             return '../factory-manager/factory-manager.php';
         case 'productionoperator':
             return '../production-operator/production-operator.php';
         case 'auditor':
-            return '../auditor/auditor.html';
+            return '../auditor/auditor.php';
         default:
             logError("Unknown role: $role"); // Log the unknown role error
             return 'login.php?error=unknownrole'; // Return the error URL

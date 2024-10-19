@@ -11,8 +11,10 @@
 <body>
     <div id="admin-select">
         <ul>
-            <li><a href="../home/home.html"><button>User Accounts & Roles</button></a></li>
-            <li><a href="../home/home.html"><button>Dashboard</button></a></li>
+            <li><a href="../home/home.php"><button>User Accounts & Roles</button></a></li> 
+            
+
+            <li><a href="../home/home.php"><button>Dashboard</button></a></li>
         </ul>
     </div>
 </body>
