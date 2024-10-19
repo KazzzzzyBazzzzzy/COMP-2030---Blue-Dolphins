@@ -2,6 +2,7 @@
 session_start();
 require '../config/config.php';
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -92,3 +93,5 @@ function logError($errorMessage) {
     </form>
 </body>
 </html>
+
+

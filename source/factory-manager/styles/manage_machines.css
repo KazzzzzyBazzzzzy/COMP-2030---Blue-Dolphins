@@ -1,0 +1,93 @@
+.machine-form {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 300px;
+}
+
+.machine-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.machine-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-button, .update-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.add-button:hover, .update-button:hover {
+    background-color: #45a049;
+}
+
+.machines-table {
+    width: 80%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: white;
+    border: 2px solid black;
+}
+
+.machines-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    border: 2px solid black;
+}
+
+.machines-table td {
+    padding: 15px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: white;
+}
+
+.machines-table tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.machines-table th:hover {
+    background-color: #3e8e41;
+}
+
+.machines-table td a {
+    margin-right: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.machines-table td a:hover {
+    text-decoration: underline;
+}
+
+.machines-table tr td {
+    font-style: italic;
+}
+
+.machines-table tr td {
+    text-align: center;
+    font-style: italic;
+}
