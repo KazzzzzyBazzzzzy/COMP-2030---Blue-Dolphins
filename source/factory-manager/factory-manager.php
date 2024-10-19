@@ -11,10 +11,10 @@
 <body>
 <div id="factory-manager-select">
     <ul>
-        <li><a href="../home/home.html"><button>Monitor Factory Performance</button></a></li>
-        <li><a href="../home/home.html"><button>Manage Jobs</button></a></li>
+        <li><a href="../home/home.php"><button>Monitor Factory Performance</button></a></li>
+        <li><a href="../home/home.php"><button>Manage Jobs</button></a></li>
         <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li>
-        <li><a href="../home/home.html"><button>Assign Roles</button></a></li>
+        <li><a href="../home/home.php"><button>Assign Roles</button></a></li>
     </ul>
 </div>
 </body>

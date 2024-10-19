@@ -11,10 +11,10 @@
 <body>
 <div id="production-operator-select">
     <ul>
-        <li><a href="../home/home.html"><button>Monitor Factory Performance</button></a></li>
-        <li><a href="../home/home.html"><button>Update Machines</button></a></li>
-        <li><a href="../home/home.html"><button>Update Jobs</button></a></li>
-        <li><a href="../home/home.html"><button>Create Task Notes</button></a></li>
+        <li><a href="../home/home.php"><button>Monitor Factory Performance</button></a></li>
+        <li><a href="../home/home.php"><button>Update Machines</button></a></li>
+        <li><a href="../home/home.php"><button>Update Jobs</button></a></li>
+        <li><a href="../home/home.php"><button>Create Task Notes</button></a></li>
     </ul>
 </div>
 </body>

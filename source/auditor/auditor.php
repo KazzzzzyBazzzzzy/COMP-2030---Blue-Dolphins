@@ -11,8 +11,8 @@
 <body>
 <div id="auditor-select">
     <ul>
-        <li><a href="../home/home.html"><button>Summary Report</button></a></li>
-        <li><a href="../home/home.html"><button>Dashboard</button></a></li>
+        <li><a href="../home/home.php"><button>Summary Report</button></a></li>
+        <li><a href="../home/home.php"><button>Dashboard</button></a></li>
     </ul>
 </div>
 </body>
