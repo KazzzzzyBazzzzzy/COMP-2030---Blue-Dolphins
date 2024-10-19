@@ -41,7 +41,7 @@ function getDashboardUrl($role) {
         case 'admin':
             return '../administrator/administrator.html';
         case 'factorymanager':
-            return '../factory-manager/factory-manager.html';
+            return '../factory-manager/factory-manager.php';
         case 'productionoperator':
             return '../production-operator/production-operator.html';
         case 'auditor':
