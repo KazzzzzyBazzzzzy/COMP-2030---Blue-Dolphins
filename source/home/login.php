@@ -76,7 +76,7 @@ function logError($errorMessage) {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="../home/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
 <body>
     <div class="error-container">

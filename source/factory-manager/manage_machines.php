@@ -105,8 +105,8 @@ try {
     <meta charset="UTF-8"> <!-- Set the character encoding for the HTML document -->
     <meta name="author" content="Daniel Rosich" /> <!-- Set the author of the document -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Set the viewport settings for responsive design -->
-    <link rel="stylesheet" href="../style.css"> <!-- Link to the main stylesheet -->
-    <link rel="stylesheet" href="../factory-manager/styles/manage_machines.css"> <!-- Link to the specific stylesheet for managing machines -->
+    <link rel="stylesheet" type="text/css" href="../css/global.css"><!-- Link to the main stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../css/manage_machines.css">
     <link rel="stylesheet" type="text/css" href="../css/logout.css">
     <title>Manage Machines Home</title> <!-- Set the title of the webpage -->
 </head>
