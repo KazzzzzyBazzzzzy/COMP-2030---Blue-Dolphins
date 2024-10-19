@@ -50,7 +50,7 @@ function getDashboardUrl($role) {
         case 'factorymanager':
             return '../factory-manager/factory-manager.php';
         case 'productionoperator':
-            return '../production-operator/production-operator.html';
+            return '../production-operator/production-operator.php';
         case 'auditor':
             return '../auditor/auditor.html';
         default:
