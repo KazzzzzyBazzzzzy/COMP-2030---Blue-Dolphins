@@ -10,3 +10,6 @@
 [2024-10-19 11:32:55] Error: Role fetched from database: productionoperator
 [2024-10-19 11:41:56] Error: Role fetched from database: admin
 [2024-10-19 11:42:32] Error: Role fetched from database: admin
+[2024-10-19 23:29:23] Error: User logged in successfully: admin
+[2024-10-19 23:29:47] Error: User logged in successfully: admin
+[2024-10-19 23:45:46] Error: User logged in successfully: admin

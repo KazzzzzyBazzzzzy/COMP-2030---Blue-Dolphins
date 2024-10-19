@@ -1,0 +1,32 @@
+/* Logout button styling */
+.logout-btn {
+    display: flex;               /* Use flexbox layout */
+    justify-content: flex-start; /* Align items to the left */
+    margin: 20px;               /* Add some margin for spacing */
+}
+
+.logout-button {
+    display: inline-block;       /* Ensure it behaves like a button */
+    background-color: #f44336;  /* Red background color */
+    padding: 10px 20px;         /* Padding around the text */
+    color: white;                /* Text color */
+    font-weight: bold;           /* Make the text bold */
+    border-radius: 5px;         /* Rounded corners */
+    text-align: center;          /* Center the text */
+    cursor: pointer;             /* Change cursor to pointer */
+    text-decoration: none;       /* Remove underline */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for logout button */
+.logout-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+    transform: translateY(-2px); /* Slight upward movement on hover */
+}
+
+/* Active state effect for logout button */
+.logout-button:active {
+    transform: translateY(0); /* Reset position on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adjust shadow on click */
+}
