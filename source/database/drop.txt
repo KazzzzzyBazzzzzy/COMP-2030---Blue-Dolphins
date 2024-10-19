@@ -1,5 +1,13 @@
-CREATE DATABASE IF NOT EXISTS smd_database;
+DROP DATABASE smd_database;
+
+CREATE DATABASE smd_database;
+
 USE smd_database;
-DROP TABLE IF EXISTS factory_logs;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS machine;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+SELECT CONCAT('DROP TABLE ', GROUP_CONCAT(table_name), ';') AS drop_all_tables
+FROM information_schema.tables 
+WHERE table_schema = 'smd_database';
+
+SET FOREIGN_KEY_CHECKS = 1;
