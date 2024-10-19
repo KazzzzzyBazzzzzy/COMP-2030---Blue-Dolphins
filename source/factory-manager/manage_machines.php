@@ -1,7 +1,10 @@
 <?php
 // Start the session to manage user sessions
 session_start();
-
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'factorymanager') {
+    header("Location: ../home/login.php");
+    exit();
+}
 // Include the configuration file which contains database connection details
 require '../config/config.php';
 
@@ -104,6 +107,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Set the viewport settings for responsive design -->
     <link rel="stylesheet" href="../style.css"> <!-- Link to the main stylesheet -->
     <link rel="stylesheet" href="../factory-manager/styles/manage_machines.css"> <!-- Link to the specific stylesheet for managing machines -->
+    <link rel="stylesheet" type="text/css" href="../css/logout.css">
     <title>Manage Machines Home</title> <!-- Set the title of the webpage -->
 </head>
 <body>
@@ -114,6 +118,7 @@ try {
         <li><a href="../home/home.html"><button>Manage Jobs</button></a></li> <!-- Link to manage jobs -->
         <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li> <!-- Link to manage machines -->
         <li><a href="../home/home.html"><button>Assign Roles</button></a></li> <!-- Link to assign roles -->
+        <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>
 
