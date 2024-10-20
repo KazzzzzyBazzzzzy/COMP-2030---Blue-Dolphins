@@ -21,8 +21,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     <h1>Administrator Home</h1>
     <div id="admin-select">
         <ul>
-            <li><a href="../home/home.php"><button>User Accounts & Roles</button></a></li>
-            <li><a href="../home/home.php"><button>Dashboard</button></a></li>
+            <li><a href="../administrator/manage_user.php"><button>User Accounts & Roles</button></a></li>
+            <li><a href="#"><button>Dashboard</button></a></li>
             <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
         </ul>
     </div>
