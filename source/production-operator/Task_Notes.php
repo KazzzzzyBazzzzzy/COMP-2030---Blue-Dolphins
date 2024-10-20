@@ -114,36 +114,47 @@ try {
             <th>Machine Name</th>
             <th>Temperature (°C)</th>
             <th>Humidity (%)</th>
-            <th>Actions</th>
+            <th>Notes</th>
+            <th>Add Notes</th>
         </tr>
     </thead>
     <tbody>
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                        <td>" . htmlspecialchars($row['timestamp']) . "</td>
-                        <td>" . htmlspecialchars($row['machine_name']) . "</td>
-                        <td>" . htmlspecialchars($row['temperature']) . " °C</td>
-                        <td>" . htmlspecialchars($row['humidity']) . " %</td>
-                        <td>
-                            <form method='POST' class='note-form'>
-                                <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
-                                <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
-                                <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
-                                <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
-                                <textarea name='note' placeholder='Add your notes here...' required></textarea>
-                                <button type='submit' name='submit_note'>Add Note</button>
-                            </form>
-                        </td>
-                      </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='5'>No logs available</td></tr>";
-        }
-        ?>
+    <?php
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>" . htmlspecialchars($row['timestamp']) . "</td>
+                <td>" . htmlspecialchars($row['machine_name']) . "</td>
+                <td>" . htmlspecialchars($row['temperature']) . " °C</td>
+                <td>" . htmlspecialchars($row['humidity']) . " %</td>
+                
+                <!-- Column for adding notes -->
+                <td>
+                    <form method='POST' class='note-form'>
+                        <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
+                        <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
+                        <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
+                        <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
+                        
+                        <div class='textarea-button-container'>
+                            <textarea name='note' placeholder='Add your notes here...' required></textarea>
+                        
+                        </div>
+                    </form>
+                </td>
+
+                <td>
+                    <button type='submit' name='submit_note'>Add Note</button>
+                </td>
+              </tr>";
+    }
+} else {
+    echo "<tr><td colspan='6'>No logs available</td></tr>";
+}
+?>
     </tbody>
 </table>
+
 
 <h2>Notes</h2>
 <table border="1">
@@ -156,6 +167,7 @@ try {
             <th>Humidity (%)</th>
             <th>Note</th>
             <th>Actions</th>
+            <th>Edit Note</th>
         </tr>
     </thead>
     <tbody id="notes-table">
@@ -174,13 +186,20 @@ try {
                             <td>" . htmlspecialchars($note_row['temperature']) . " °C</td>
                             <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
                             <td>" . htmlspecialchars($note_row['notes']) . "</td>
+                            <form method='POST' class='edit-form'>
                             <td>
-                               <form method='POST' class='edit-form'>
+
                                     <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
-                                    <textarea name='new_note' required>" . htmlspecialchars($note_row['notes']) . "</textarea>
-                                    <button type='submit' name='edit_note'>Edit Note</button>
-                                </form>
+                                    <div class='textarea-button-container'>
+                                        <textarea name='new_note' required>" . htmlspecialchars($note_row['notes']) . "</textarea>
+
+                                    </div>
+                               
                             </td>
+                            <td>
+                                <button type='submit' name='edit_note'>Edit Note</button>
+                            </td>
+                             </form>
                           </tr>";
                 }
             } else {
@@ -191,6 +210,7 @@ try {
             echo "<tr><td colspan='7'>Error fetching notes. Please check the logs.</td></tr>";
         }
         ?>
+
     </tbody>
 </table>
 
