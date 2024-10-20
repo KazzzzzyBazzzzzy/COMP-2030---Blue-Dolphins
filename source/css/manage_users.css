@@ -1,0 +1,119 @@
+/* Style for the heading */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Style for the user form */
+.user-form {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 15px;
+    max-width: 600px;
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Style for form labels */
+.user-form label {
+    font-size: 16px;
+    color: #555;
+    align-self: center;
+}
+
+/* Style for form inputs */
+.user-form input[type="text"],
+.user-form input[type="password"],
+.user-form select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Style for form buttons */
+.form-buttons {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.add-button,
+.update-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-button {
+    background-color: #28a745;
+}
+
+.update-button {
+    background-color: #007bff;
+}
+
+.add-button:hover {
+    background-color: #218838;
+}
+
+.update-button:hover {
+    background-color: #0069d9;
+}
+
+.users-table {
+    width: 80%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: white;
+    border: 2px solid black;
+}
+
+.users-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    border: 2px solid black;
+}
+
+.users-table td {
+    padding: 15px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: white;
+}
+
+.users-table tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.users-table th:hover {
+    background-color: #3e8e41;
+}
+
+.users-table td a {
+    margin-right: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.users-table td a:hover {
+    text-decoration: underline;
+}
+
+.users-table tr td {
+    font-style: italic;
+    text-align: center;
+}
+
