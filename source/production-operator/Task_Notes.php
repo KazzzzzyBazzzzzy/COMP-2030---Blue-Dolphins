@@ -16,13 +16,11 @@ function logError($errorMessage) {
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-    // Establish the connection to the database
     if ($conn->connect_error) {
         logError("Connection failed: " . $conn->connect_error);
         die("Connection failed. Please try again later.");
     }
 
-    // Query to fetch random logs including humidity
     $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY RAND() LIMIT 10";
     $result = $conn->query($sql);
 
@@ -57,7 +55,6 @@ try {
     </ul>
 </div>
 
-
 <form method="POST" action="">
     <button type="submit" name="randomize">Get Random Data</button>
 </form>
@@ -71,15 +68,12 @@ try {
         <th>Humidity (%)</th>
     </tr>
     <?php
-
     if (isset($_POST['randomize'])) {
-
         $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY RAND() LIMIT 10";
         $result = $conn->query($sql);
     }
 
     if ($result->num_rows > 0) {
-
         while($row = $result->fetch_assoc()) {
             echo "<tr>
                     <td>" . $row['timestamp'] . "</td>
@@ -94,10 +88,38 @@ try {
     ?>
 </table>
 
+<h2>Notes</h2>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Timestamp</th>
+        <th>Machine Name</th>
+        <th>Temperature (°C)</th>
+        <th>Humidity (%)</th>
+    </tr>
+    <?php
+    $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity FROM notes";
+    $notes_result = $conn->query($sql_notes);
+
+    if ($notes_result->num_rows > 0) {
+        while ($note_row = $notes_result->fetch_assoc()) {
+            echo "<tr>
+                    <td>" . $note_row['id'] . "</td>
+                    <td>" . $note_row['timestamp'] . "</td>
+                    <td>" . $note_row['machine_name'] . "</td>
+                    <td>" . $note_row['temperature'] . " °C</td>
+                    <td>" . $note_row['humidity'] . " %</td>
+                  </tr>";
+        }
+    } else {
+        echo "<tr><td colspan='5'>No notes available</td></tr>";
+    }
+    ?>
+</table>
+
 </body>
 </html>
 
 <?php
-
 $conn->close();
 ?>
