@@ -50,7 +50,6 @@ try {
             $note_id = $_POST['note_id'];
             $new_note = $_POST['new_note'];
 
-            // Update existing note
             $update_sql = "UPDATE notes SET notes = ? WHERE id = ?";
             $stmt = $conn->prepare($update_sql);
             $stmt->bind_param("si", $new_note, $note_id);
@@ -74,8 +73,19 @@ try {
     <meta name="author" content="Daniel Rosich, Samuel Ngiri" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/task_notes.css">
     <link rel="stylesheet" type="text/css" href="../css/logout.css">
     <title>Production Operator Home</title>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
 <h1>Production Operator Home</h1>
@@ -84,98 +94,132 @@ try {
         <li><a href="../home/home.html"><button>Monitor Factory Performance</button></a></li>
         <li><a href="../home/home.html"><button>Update Machines</button></a></li>
         <li><a href="../home/home.html"><button>Update Jobs</button></a></li>
-        <li><a href="../production-operator/Task_Notes.php"><button>Manage Task Notes</button></a></li>
+        <li><a href="../production-operator/task_notes.php"><button>Manage Task Notes</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>
 
-<form method="POST" action="">
-    <button type="submit" name="randomize">Get Random Data</button>
-</form>
-
 <h2>Factory Logs</h2>
-<table border="1">
-    <tr>
-        <th>Timestamp</th>
-        <th>Machine Name</th>
-        <th>Temperature (°C)</th>
-        <th>Humidity (%)</th>
-        <th>Actions</th>
-    </tr>
-    <?php
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>
-                    <td>" . htmlspecialchars($row['timestamp']) . "</td>
-                    <td>" . htmlspecialchars($row['machine_name']) . "</td>
-                    <td>" . htmlspecialchars($row['temperature']) . " °C</td>
-                    <td>" . htmlspecialchars($row['humidity']) . " %</td>
-                    <td>
-                        <form method='POST'>
-                            <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
-                            <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
-                            <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
-                            <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
-                            <textarea name='note' placeholder='Add your notes here...' required></textarea>
-                            <button type='submit' name='submit_note'>Add Note</button>
-                        </form>
-                    </td>
-                  </tr>";
-        }
-    } else {
-        echo "<tr><td colspan='5'>No logs available</td></tr>";
-    }
-    ?>
-</table>
-
-<h2>Notes</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Timestamp</th>
-        <th>Machine Name</th>
-        <th>Temperature (°C)</th>
-        <th>Humidity (%)</th>
-        <th>Note</th>
-        <th>Actions</th>
-    </tr>
-    <?php
-    $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
-    
-    try {
-        $notes_result = $conn->query($sql_notes);
-        
-        if ($notes_result->num_rows > 0) {
-            while ($note_row = $notes_result->fetch_assoc()) {
+<table id="factory-logs" border="1">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Machine Name</th>
+            <th>Temperature (°C)</th>
+            <th>Humidity (%)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
                 echo "<tr>
-                        <td>" . htmlspecialchars($note_row['id']) . "</td>
-                        <td>" . htmlspecialchars($note_row['timestamp']) . "</td>
-                        <td>" . htmlspecialchars($note_row['machine_name']) . "</td>
-                        <td>" . htmlspecialchars($note_row['temperature']) . " °C</td>
-                        <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
-                        <td>" . htmlspecialchars($note_row['notes']) . "</td>
+                        <td>" . htmlspecialchars($row['timestamp']) . "</td>
+                        <td>" . htmlspecialchars($row['machine_name']) . "</td>
+                        <td>" . htmlspecialchars($row['temperature']) . " °C</td>
+                        <td>" . htmlspecialchars($row['humidity']) . " %</td>
                         <td>
-                            <form method='POST'>
-                                <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
-                                <input type='text' name='new_note' value='" . htmlspecialchars($note_row['notes']) . "' required />
-                                <button type='submit' name='edit_note'>Edit Note</button>
+                            <form method='POST' class='note-form' onsubmit='return addNote(this)'>
+                                <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
+                                <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
+                                <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
+                                <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
+                                <textarea name='note' placeholder='Add your notes here...' required></textarea>
+                                <button type='submit' name='submit_note'>Add Note</button>
                             </form>
                         </td>
                       </tr>";
             }
         } else {
-            echo "<tr><td colspan='7'>No notes available</td></tr>";
+            echo "<tr><td colspan='5'>No logs available</td></tr>";
         }
-    } catch (Exception $e) {
-        logError("Error fetching notes: " . $e->getMessage());
-        echo "<tr><td colspan='7'>Error fetching notes. Please check the logs.</td></tr>";
-    }
-    ?>
+        ?>
+    </tbody>
 </table>
 
+<h2>Notes</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Timestamp</th>
+            <th>Machine Name</th>
+            <th>Temperature (°C)</th>
+            <th>Humidity (%)</th>
+            <th>Note</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="notes-table">
+        <?php
+        $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
+        
+        try {
+            $notes_result = $conn->query($sql_notes);
+            
+            if ($notes_result->num_rows > 0) {
+                while ($note_row = $notes_result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>" . htmlspecialchars($note_row['id']) . "</td>
+                            <td>" . htmlspecialchars($note_row['timestamp']) . "</td>
+                            <td>" . htmlspecialchars($note_row['machine_name']) . "</td>
+                            <td>" . htmlspecialchars($note_row['temperature']) . " °C</td>
+                            <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
+                            <td>" . htmlspecialchars($note_row['notes']) . "</td>
+                            <td>
+                               <form method='POST' class='edit-form' onsubmit='return editNote(this)'>
+                                    <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
+                                    <textarea name='new_note' required>" . htmlspecialchars($note_row['notes']) . "</textarea>
+                                    <button type='submit' name='edit_note'>Edit Note</button>
+                                </form>
+                            </td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='7'>No notes available</td></tr>";
+            }
+        } catch (Exception $e) {
+            logError("Error fetching notes: " . $e->getMessage());
+            echo "<tr><td colspan='7'>Error fetching notes. Please check the logs.</td></tr>";
+        }
+        ?>
+    </tbody>
+</table>
+
+<script>
+    function addNote(form) {
+        const formData = new FormData(form);
+        
+        fetch('', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('factory-logs').innerHTML += data;
+            form.reset();
+        })
+        .catch(error => console.error('Error adding note:', error));
+        
+        return false;
+    }
+
+    function editNote(form) {
+        const formData = new FormData(form);
+        
+        fetch('', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            form.closest('tr').children[5].innerText = formData.get('new_note');
+        })
+        .catch(error => console.error('Error editing note:', error));
+        
+        return false; 
+    }
+</script>
 </body>
 </html>
-
-<?php
-$conn->close();
-?>

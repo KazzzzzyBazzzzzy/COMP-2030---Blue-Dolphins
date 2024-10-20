@@ -1,0 +1,62 @@
+table {
+    width: 96.8%;
+    max-width: 968px;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: white;
+    border: 2px solid black;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border: 2px solid black;
+    background-color: white;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+th:hover {
+    background-color: #3e8e41;
+}
+
+textarea {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    margin: 20px 0;
+}
+
+button {
+    font-size: 16px;
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3e8e41;
+}
+
+.logout-button {
+    background-color: #f44336;
+}
+
+.logout-button:hover {
+    background-color: #d32f2f;
+}

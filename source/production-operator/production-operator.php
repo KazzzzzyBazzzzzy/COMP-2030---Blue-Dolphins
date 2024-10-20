@@ -22,7 +22,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
         <li><a href="../home/home.php"><button>Monitor Factory Performance</button></a></li>
         <li><a href="../home/home.php"><button>Update Machines</button></a></li>
         <li><a href="../home/home.php"><button>Update Jobs</button></a></li>
-        <li><a href="../production-operator/Task_Notes.php"><button>Manage Task Notes</button></a></li>
+        <li><a href="../production-operator/task_notes.php"><button>Manage Task Notes</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>
