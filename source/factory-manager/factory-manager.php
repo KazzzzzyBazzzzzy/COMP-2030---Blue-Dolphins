@@ -19,10 +19,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'factorymanager') {
 <body>
 <div id="factory-manager-select">
     <ul>
-        <li><a href="../home/home.php"><button>Monitor Factory Performance</button></a></li>
-        <li><a href="../home/home.php"><button>Manage Jobs</button></a></li>
+        <li><a href="#"><button>Monitor Factory Performance</button></a></li>
+        <li><a href="#"><button>Manage Jobs</button></a></li>
         <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li>
-        <li><a href="../home/home.php"><button>Assign Roles</button></a></li>
+        <li><a href="#"><button>Assign Roles</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>

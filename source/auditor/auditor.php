@@ -20,8 +20,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'auditor') {
 <body>
 <div id="auditor-select">
     <ul>
-        <li><a href="../home/home.php"><button>Summary Report</button></a></li>
-        <li><a href="../home/home.php"><button>Dashboard</button></a></li>
+        <li><a href="#"><button>Summary Report</button></a></li>
+        <li><a href="#"><button>Dashboard</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>

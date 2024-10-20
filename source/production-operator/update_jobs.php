@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="author" content="Daniel Rosich" />
+    <meta name="author" content="Daniel Rosich, Samuel ngiri" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/logout.css">
@@ -22,7 +22,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
         <li><a href="../home/home.html"><button>Monitor Factory Performance</button></a></li>
         <li><a href="../home/home.html"><button>Update Machines</button></a></li>
         <li><a href="../home/home.html"><button>Update Jobs</button></a></li>
-        <li><a href="../home/home.html"><button>Create Task Notes</button></a></li>
+        <li><a href="../production-operator/Task_Notes.php"><button>Manage Task Notes</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>
