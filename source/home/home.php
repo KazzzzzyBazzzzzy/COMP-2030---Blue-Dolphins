@@ -15,7 +15,7 @@
         <ul>
             <li><a href="#"><button>Admin</button></a></li>
             <li><a href="#"><button>Auditor</button></a></li>
-            <li><a href="#"><button>Factory Manager</button></a></li>
+            <li><a href="../factory-manager/factory-manager.php"><button>Factory Manager</button></a></li>
             <li><a href="#"><button>Production Operator</button></a></li>
         </ul>
     </div>
