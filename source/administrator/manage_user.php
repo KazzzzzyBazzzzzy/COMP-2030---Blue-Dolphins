@@ -108,13 +108,13 @@ try {
 
 <h2>Add / Update User</h2>
 <form method="post" class="user-form">
-    <input type="hidden" name="original_id" id="original_id" value="">
+    <input type="hidden" name="original_id" id="original_id" value="" required>
     <label for="user_id">User ID:</label>
     <input type="text" name="user_id" id="user_id" value="" required>
     <label for="username">Username:</label>
     <input type="text" name="username" id="username" required>
     <label for="password">Password:</label>
-    <input type="password" name="password" id="password">
+    <input type="password" name="password" id="password" required>
     <label for="role">Role:</label>
     <select name="role" id="role" required>
         <option value="admin">Admin</option>
