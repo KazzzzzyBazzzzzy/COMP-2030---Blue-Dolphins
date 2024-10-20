@@ -29,21 +29,36 @@ try {
         die("Failed to retrieve data.");
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_note'])) {
-        $timestamp = $_POST['timestamp'];
-        $machine_name = $_POST['machine_name'];
-        $temperature = $_POST['temperature'];
-        $humidity = $_POST['humidity'];
-        $notes = $_POST['note']; 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['submit_note'])) {
+            $timestamp = $_POST['timestamp'];
+            $machine_name = $_POST['machine_name'];
+            $temperature = $_POST['temperature'];
+            $humidity = $_POST['humidity'];
+            $notes = $_POST['note'];
 
+            // Insert new note
+            $insert_sql = "INSERT INTO notes (timestamp, machine_name, temperature, humidity, notes) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($insert_sql);
+            $stmt->bind_param("ssdds", $timestamp, $machine_name, $temperature, $humidity, $notes);
 
-        $insert_sql = "INSERT INTO notes (timestamp, machine_name, temperature, humidity, notes) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($insert_sql);
-        $stmt->bind_param("ssdds", $timestamp, $machine_name, $temperature, $humidity, $notes);
+            if (!$stmt->execute()) {
+                logError("Insert failed: " . $stmt->error);
+                die("Failed to save note.");
+            }
+        } elseif (isset($_POST['edit_note'])) {
+            $note_id = $_POST['note_id'];
+            $new_note = $_POST['new_note'];
 
-        if (!$stmt->execute()) {
-            logError("Insert failed: " . $stmt->error);
-            die("Failed to save note.");
+            // Update existing note
+            $update_sql = "UPDATE notes SET notes = ? WHERE id = ?";
+            $stmt = $conn->prepare($update_sql);
+            $stmt->bind_param("si", $new_note, $note_id);
+
+            if (!$stmt->execute()) {
+                logError("Update failed: " . $stmt->error);
+                die("Failed to update note.");
+            }
         }
     }
 } catch (Exception $e) {
@@ -122,6 +137,7 @@ try {
         <th>Temperature (°C)</th>
         <th>Humidity (%)</th>
         <th>Note</th>
+        <th>Actions</th>
     </tr>
     <?php
     $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
@@ -137,15 +153,22 @@ try {
                         <td>" . htmlspecialchars($note_row['machine_name']) . "</td>
                         <td>" . htmlspecialchars($note_row['temperature']) . " °C</td>
                         <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
-                        <td>" . htmlspecialchars($note_row['notes']) . "</td> <!-- Updated here -->
+                        <td>" . htmlspecialchars($note_row['notes']) . "</td>
+                        <td>
+                            <form method='POST'>
+                                <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
+                                <input type='text' name='new_note' value='" . htmlspecialchars($note_row['notes']) . "' required />
+                                <button type='submit' name='edit_note'>Edit Note</button>
+                            </form>
+                        </td>
                       </tr>";
             }
         } else {
-            echo "<tr><td colspan='6'>No notes available</td></tr>";
+            echo "<tr><td colspan='7'>No notes available</td></tr>";
         }
     } catch (Exception $e) {
         logError("Error fetching notes: " . $e->getMessage());
-        echo "<tr><td colspan='6'>Error fetching notes. Please check the logs.</td></tr>";
+        echo "<tr><td colspan='7'>Error fetching notes. Please check the logs.</td></tr>";
     }
     ?>
 </table>
