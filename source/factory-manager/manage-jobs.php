@@ -26,11 +26,30 @@ try {
         die("Connection failed. Please try again later."); // Terminate the script and display an error message
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $employee = $_POST['employee'];
-        $job = $_POST['Machine'];
+    // Delete job if delete_id is set
+    if (isset($_GET['delete_id'])) {
+        $delete_id = $_GET['delete_id'];
+        $sql = "DELETE FROM `jobs` WHERE `jobs`.`job-id` = '$delete_id'";
+        $conn->query($sql);
+        header("Location: manage-jobs.php"); // Redirect to the same page to refresh the list
+        exit();
+    }
 
-        $sql = "INSERT INTO jobs (Employee, Machine) VALUES ('$employee', '$job')";
+    // Update job if update_job is set
+    if (isset($_POST['update_job'])) {
+        $jobId = $_POST['edit_job_id'];
+        $jobDescription = $_POST['edit_job_name'];
+        $sql = "UPDATE `jobs` SET `Jobs-Description` = '$jobDescription' WHERE `job-id` = '$jobId'";
+        $conn->query($sql);
+        echo "Job updated successfully."; // Display a success message
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_job'])) {
+        $employee = $_POST['employee'];
+        $machine = $_POST['machine'];
+        $jobsDescription = $_POST['job_name'];
+
+        $sql = "INSERT INTO jobs (Employee, Machine, `Jobs-Description`) VALUES ('$employee', '$machine', '$jobsDescription')";
         $conn->query($sql);
         echo "New job added successfully."; // Display a success message
     }
@@ -43,6 +62,17 @@ try {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $employees[] = $row;
+        }
+    }
+
+    // Fetch machines
+    $sql = "SELECT * FROM `jobs` ORDER BY `jobs`.`Machine` ASC";
+    $result = $conn->query($sql);
+
+    $machines = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $machines[] = $row;
         }
     }
 
@@ -71,24 +101,33 @@ try {
 <div id="factory-manager-select">
     <ul>
         <li><a href="../home/home.php"><button>Monitor Factory Performance</button></a></li>
-        <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li>
         <li><a href="../factory-manager/manage-jobs.php"><button>Manage Jobs</button></a></li>
+        <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li>
         <li><a href="../home/home.php"><button>Assign Roles</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>
 
-<h2>Add & Edit Jobs</h2>
+<h2>Add a Job</h2>
 <form method="post" class="job-form">
     <label for="employee"></label>
-    <select id="employee" name="employee" onchange="fillEmployeeTextbox()">
+    <select id="employee" name="employee">
         <option value="">Select an employee</option>
         <?php foreach ($employees as $employee): ?>
             <option value="<?php echo $employee['Employee']; ?>"><?php echo $employee['Employee']; ?></option>
         <?php endforeach; ?>
     </select>
-    <label for="job_name">Job:</label>
-    <input type="text" name="job_name" id="job_name" required>
+
+    <label for="machine"></label>
+    <select id="machine" name="machine">
+        <option value="">Select a machine</option>
+        <?php foreach ($machines as $machine): ?>
+            <option value="<?php echo $machine['Machine']; ?>"><?php echo $machine['Machine']; ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <label for="job_name">Job Description:</label>
+    <textarea name="job_name" id="job_name" rows="4" cols="50" required></textarea>
 
     <div class="form-buttons">
         <button type="submit" name="add_job" class="add-button">Add Job</button>
@@ -99,34 +138,58 @@ try {
 <table class="jobs-table">
     <tr>
         <th>Employee</th>
-        <th>Job</th>
+        <th>Machine</th>
+        <th>Job Description</th>
+        <th>Actions</th>
     </tr>
     <?php
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "<tr>
                     <td>{$row['Employee']}</td>
                     <td>{$row['Machine']}</td>
+                    <td>{$row['Jobs-Description']}</td>
                     <td>
-                        <a href='#' onclick=\"editJob('{$row['Employee']}', '{$row['Machine']}')\">Edit</a>
-                        <a href='?delete_id={$row['Employee']}' onclick=\"return confirm('Are you sure you want to delete this job?');\">Delete</a>
+                        <a href='#' onclick=\"editJob('{$row['Employee']}', '{$row['Machine']}', '{$row['Jobs-Description']}', '{$row['job-id']}')\">Edit</a>
+                        <a href='?delete_id={$row['job-id']}' onclick=\"return confirm('Are you sure you want to delete this job?');\">Delete</a>
                     </td>
                   </tr>";
         }
     } else {
-        echo "<tr><td colspan='3'>No jobs found.</td></tr>";
+        echo "<tr><td colspan='4'>No jobs found.</td></tr>";
     }
     ?>
 </table>
 
 <script>
-    function fillEmployeeTextbox() {
-        var employeeDropdown = document.getElementById('employee');
-        var employeeTextbox = document.getElementById('employee_textbox');
-        employeeTextbox.value = employeeDropdown.value;
+    function editJob(employee, machine, jobDescription, jobId) {
+        document.getElementById('edit_employee').value = employee;
+        document.getElementById('edit_machine').value = machine;
+        document.getElementById('edit_job_name').value = jobDescription;
+        document.getElementById('edit_job_id').value = jobId;
+        document.getElementById('edit-job-form').style.display = 'block';
     }
-
 </script>
+
+<!--Edit form for when 'edit' is clicked-->
+<div id="edit-job-form" style="display:none;">
+    <h2>Edit Job</h2>
+    <form method="post" class="job-form">
+        <input type="hidden" id="edit_job_id" name="edit_job_id">
+        <label for="edit_employee">Employee:</label>
+        <input type="text" id="edit_employee" name="edit_employee" readonly>
+
+        <label for="edit_machine">Machine:</label>
+        <input type="text" id="edit_machine" name="edit_machine" readonly>
+
+        <label for="edit_job_name">Job Description:</label>
+        <textarea name="edit_job_name" id="edit_job_name" rows="4" cols="50" required></textarea>
+
+        <div class="form-buttons">
+            <button type="submit" name="update_job" class="update-button">Update Job</button>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
