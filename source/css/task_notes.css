@@ -61,10 +61,36 @@ button:hover {
     background-color: #3e8e41;
 }
 
-.logout-button {
-    background-color: #f44336;
+
+.pagination-button,
+.pagination-number {
+    padding: 5px 10px; 
+    margin: 2px; 
+    text-decoration: none; 
+    background-color: #4CAF50;
+    color: #333;
+    border: 1px solid #ccc; 
+    border-radius: 0.2rem; 
+    cursor: pointer;
+    transition: background-color 0.3s; 
 }
 
-.logout-button:hover {
-    background-color: #d32f2f;
+
+.pagination-number.active {
+    background-color: #007bff; 
+    color: white;
+}
+
+
+.pagination-container {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Hover Effects */
+.pagination-number:hover,
+.pagination-button:hover {
+    background: #3e8e41;
 }

@@ -7,31 +7,36 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
 
 require '../config/config.php';
 
-
 function logError($errorMessage) {
     $logFile = '../logs/errors.log';
     $currentDateTime = date('Y-m-d H:i:s');
     file_put_contents($logFile, "[$currentDateTime] Error: $errorMessage" . PHP_EOL, FILE_APPEND);
 }
 
-
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-
     if ($conn->connect_error) {
         logError("Connection failed: " . $conn->connect_error);
         die("Connection failed. Please try again later.");
     }
 
-    // Fetch factory logs
-    $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY RAND() LIMIT 10";
+
+    $records_per_page = 10;
+
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+    // Calculate the starting record
+    $start_from = ($page - 1) * $records_per_page;
+
+    $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY timestamp LIMIT $start_from, $records_per_page";
     $result = $conn->query($sql);
 
     if (!$result) {
         logError("Query failed: " . $conn->error);
         die("Failed to retrieve data.");
     }
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['submit_note'])) {
             $timestamp = $_POST['timestamp'];
@@ -39,7 +44,6 @@ try {
             $temperature = $_POST['temperature'];
             $humidity = $_POST['humidity'];
             $notes = $_POST['note'];
-
 
             $insert_sql = "INSERT INTO notes (timestamp, machine_name, temperature, humidity, notes) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($insert_sql);
@@ -52,7 +56,6 @@ try {
         } elseif (isset($_POST['edit_note'])) {
             $note_id = $_POST['note_id'];
             $new_note = $_POST['new_note'];
-
 
             $update_sql = "UPDATE notes SET notes = ? WHERE id = ?";
             $stmt = $conn->prepare($update_sql);
@@ -67,11 +70,20 @@ try {
             }
         }
     }
+
+    $total_sql = "SELECT COUNT(*) FROM factory_logs";
+    $total_result = $conn->query($total_sql);
+    $total_rows = $total_result->fetch_array()[0];
+
+    // Calculate the total number of pages
+    $total_pages = ceil($total_rows / $records_per_page);
+
 } catch (Exception $e) {
     logError("Exception caught: " . $e->getMessage());
     die("An error occurred. Please try again later.");
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -107,6 +119,48 @@ try {
 </div>
 
 <h2>Factory Logs</h2>
+
+
+<nav class="pagination-container">
+    <?php if ($page > 1): ?>
+        <a class="pagination-button" href="?page=1">First</a>
+    <?php endif; ?>
+
+    <?php if ($page > 1): ?>
+        <a class="pagination-button" href="?page=<?php echo $page - 1; ?>">Previous</a>
+    <?php endif; ?>
+
+    <div id="pagination-numbers">
+        <?php 
+
+        $start_page = max(1, $page - 5);
+        $end_page = min($total_pages, $start_page + 9);
+
+
+        if ($end_page - $start_page < 9) {
+            $start_page = max(1, $end_page - 9);
+        }
+
+        for ($i = $start_page; $i <= $end_page; $i++): ?>
+            <a class="pagination-number <?php if($page == $i) echo 'active'; ?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+        <?php endfor; ?>
+    </div>
+
+
+    <?php if ($page < $total_pages): ?>
+        <a class="pagination-button" href="?page=<?php echo $page + 1; ?>">Next</a>
+    <?php endif; ?>
+
+
+    <?php if ($page < $total_pages): ?>
+        <a class="pagination-button" href="?page=<?php echo $total_pages; ?>">Last</a>
+    <?php endif; ?>
+</nav>
+
+
+
+
+
 <table id="factory-logs" border="1">
     <thead>
         <tr>
@@ -120,41 +174,33 @@ try {
     </thead>
     <tbody>
     <?php
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>" . htmlspecialchars($row['timestamp']) . "</td>
-                <td>" . htmlspecialchars($row['machine_name']) . "</td>
-                <td>" . htmlspecialchars($row['temperature']) . " °C</td>
-                <td>" . htmlspecialchars($row['humidity']) . " %</td>
-                
-                <!-- Column for adding notes -->
-                <td>
-                    <form method='POST' class='note-form'>
-                        <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
-                        <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
-                        <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
-                        <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
-                        
-                        <div class='textarea-button-container'>
-                            <textarea name='note' placeholder='Add your notes here...' required></textarea>
-                        
-                        </div>
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>
+                    <td>" . htmlspecialchars($row['timestamp']) . "</td>
+                    <td>" . htmlspecialchars($row['machine_name']) . "</td>
+                    <td>" . htmlspecialchars($row['temperature']) . " °C</td>
+                    <td>" . htmlspecialchars($row['humidity']) . " %</td>
+                    <td>
+                        <form method='POST' class='note-form'>
+                            <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
+                            <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
+                            <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
+                            <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
+                            <div class='textarea-button-container'>
+                                <textarea name='note' placeholder='Add your notes here...' required></textarea>
+                            </div>
+                    </td>
+                    <td><button type='submit' name='submit_note'>Add Note</button> </td>
                     </form>
-                </td>
-
-                <td>
-                    <button type='submit' name='submit_note'>Add Note</button>
-                </td>
-              </tr>";
+                  </tr>";
+        }
+    } else {
+        echo "<tr><td colspan='6'>No logs available</td></tr>";
     }
-} else {
-    echo "<tr><td colspan='6'>No logs available</td></tr>";
-}
-?>
+    ?>
     </tbody>
 </table>
-
 
 <h2>Notes</h2>
 <table border="1">
@@ -173,10 +219,8 @@ if ($result->num_rows > 0) {
     <tbody id="notes-table">
         <?php
         $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
-        
         try {
             $notes_result = $conn->query($sql_notes);
-            
             if ($notes_result->num_rows > 0) {
                 while ($note_row = $notes_result->fetch_assoc()) {
                     echo "<tr>
@@ -188,17 +232,14 @@ if ($result->num_rows > 0) {
                             <td>" . htmlspecialchars($note_row['notes']) . "</td>
                             <form method='POST' class='edit-form'>
                             <td>
-
                                     <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
                                     <div class='textarea-button-container'>
                                         <textarea name='new_note' required>" . htmlspecialchars($note_row['notes']) . "</textarea>
-
                                     </div>
-                               
-                            </td>
-                            <td>
-                                <button type='submit' name='edit_note'>Edit Note</button>
-                            </td>
+                                </td>
+                                <td>
+                                    <button type='submit' name='edit_note'>Edit Note</button>
+                                </td>
                              </form>
                           </tr>";
                 }
@@ -210,9 +251,7 @@ if ($result->num_rows > 0) {
             echo "<tr><td colspan='7'>Error fetching notes. Please check the logs.</td></tr>";
         }
         ?>
-
     </tbody>
 </table>
-
 </body>
 </html>
