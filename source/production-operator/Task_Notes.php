@@ -7,20 +7,24 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
 
 require '../config/config.php';
 
+
 function logError($errorMessage) {
     $logFile = '../logs/errors.log';
     $currentDateTime = date('Y-m-d H:i:s');
     file_put_contents($logFile, "[$currentDateTime] Error: $errorMessage" . PHP_EOL, FILE_APPEND);
 }
 
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
+
     if ($conn->connect_error) {
         logError("Connection failed: " . $conn->connect_error);
         die("Connection failed. Please try again later.");
     }
 
+    // Fetch factory logs
     $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY RAND() LIMIT 10";
     $result = $conn->query($sql);
 
@@ -28,7 +32,6 @@ try {
         logError("Query failed: " . $conn->error);
         die("Failed to retrieve data.");
     }
-
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['submit_note'])) {
             $timestamp = $_POST['timestamp'];
@@ -37,7 +40,7 @@ try {
             $humidity = $_POST['humidity'];
             $notes = $_POST['note'];
 
-            // Insert new note
+
             $insert_sql = "INSERT INTO notes (timestamp, machine_name, temperature, humidity, notes) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($insert_sql);
             $stmt->bind_param("ssdds", $timestamp, $machine_name, $temperature, $humidity, $notes);
@@ -50,6 +53,7 @@ try {
             $note_id = $_POST['note_id'];
             $new_note = $_POST['new_note'];
 
+
             $update_sql = "UPDATE notes SET notes = ? WHERE id = ?";
             $stmt = $conn->prepare($update_sql);
             $stmt->bind_param("si", $new_note, $note_id);
@@ -57,6 +61,9 @@ try {
             if (!$stmt->execute()) {
                 logError("Update failed: " . $stmt->error);
                 die("Failed to update note.");
+            } else {
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit;
             }
         }
     }
@@ -120,7 +127,7 @@ try {
                         <td>" . htmlspecialchars($row['temperature']) . " °C</td>
                         <td>" . htmlspecialchars($row['humidity']) . " %</td>
                         <td>
-                            <form method='POST' class='note-form' onsubmit='return addNote(this)'>
+                            <form method='POST' class='note-form'>
                                 <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
                                 <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
                                 <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
@@ -168,7 +175,7 @@ try {
                             <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
                             <td>" . htmlspecialchars($note_row['notes']) . "</td>
                             <td>
-                               <form method='POST' class='edit-form' onsubmit='return editNote(this)'>
+                               <form method='POST' class='edit-form'>
                                     <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
                                     <textarea name='new_note' required>" . htmlspecialchars($note_row['notes']) . "</textarea>
                                     <button type='submit' name='edit_note'>Edit Note</button>
@@ -187,39 +194,5 @@ try {
     </tbody>
 </table>
 
-<script>
-    function addNote(form) {
-        const formData = new FormData(form);
-        
-        fetch('', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('factory-logs').innerHTML += data;
-            form.reset();
-        })
-        .catch(error => console.error('Error adding note:', error));
-        
-        return false;
-    }
-
-    function editNote(form) {
-        const formData = new FormData(form);
-        
-        fetch('', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            form.closest('tr').children[5].innerText = formData.get('new_note');
-        })
-        .catch(error => console.error('Error editing note:', error));
-        
-        return false; 
-    }
-</script>
 </body>
 </html>
