@@ -28,11 +28,30 @@ try {
         logError("Query failed: " . $conn->error);
         die("Failed to retrieve data.");
     }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_note'])) {
+        $timestamp = $_POST['timestamp'];
+        $machine_name = $_POST['machine_name'];
+        $temperature = $_POST['temperature'];
+        $humidity = $_POST['humidity'];
+        $notes = $_POST['note']; 
+
+
+        $insert_sql = "INSERT INTO notes (timestamp, machine_name, temperature, humidity, notes) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($insert_sql);
+        $stmt->bind_param("ssdds", $timestamp, $machine_name, $temperature, $humidity, $notes);
+
+        if (!$stmt->execute()) {
+            logError("Insert failed: " . $stmt->error);
+            die("Failed to save note.");
+        }
+    }
 } catch (Exception $e) {
     logError("Exception caught: " . $e->getMessage());
     die("An error occurred. Please try again later.");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,8 +62,8 @@ try {
     <link rel="stylesheet" type="text/css" href="../css/logout.css">
     <title>Production Operator Home</title>
 </head>
-<h1>Production Operator Home</h1>
 <body>
+<h1>Production Operator Home</h1>
 <div id="production-operator-select">
     <ul>
         <li><a href="../home/home.html"><button>Monitor Factory Performance</button></a></li>
@@ -66,24 +85,30 @@ try {
         <th>Machine Name</th>
         <th>Temperature (°C)</th>
         <th>Humidity (%)</th>
+        <th>Actions</th>
     </tr>
     <?php
-    if (isset($_POST['randomize'])) {
-        $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY RAND() LIMIT 10";
-        $result = $conn->query($sql);
-    }
-
     if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             echo "<tr>
-                    <td>" . $row['timestamp'] . "</td>
-                    <td>" . $row['machine_name'] . "</td>
-                    <td>" . $row['temperature'] . " °C</td>
-                    <td>" . $row['humidity'] . " %</td>
+                    <td>" . htmlspecialchars($row['timestamp']) . "</td>
+                    <td>" . htmlspecialchars($row['machine_name']) . "</td>
+                    <td>" . htmlspecialchars($row['temperature']) . " °C</td>
+                    <td>" . htmlspecialchars($row['humidity']) . " %</td>
+                    <td>
+                        <form method='POST'>
+                            <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
+                            <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
+                            <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
+                            <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
+                            <textarea name='note' placeholder='Add your notes here...' required></textarea>
+                            <button type='submit' name='submit_note'>Add Note</button>
+                        </form>
+                    </td>
                   </tr>";
         }
     } else {
-        echo "<tr><td colspan='4'>No logs available</td></tr>";
+        echo "<tr><td colspan='5'>No logs available</td></tr>";
     }
     ?>
 </table>
@@ -96,23 +121,31 @@ try {
         <th>Machine Name</th>
         <th>Temperature (°C)</th>
         <th>Humidity (%)</th>
+        <th>Note</th>
     </tr>
     <?php
-    $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity FROM notes";
-    $notes_result = $conn->query($sql_notes);
-
-    if ($notes_result->num_rows > 0) {
-        while ($note_row = $notes_result->fetch_assoc()) {
-            echo "<tr>
-                    <td>" . $note_row['id'] . "</td>
-                    <td>" . $note_row['timestamp'] . "</td>
-                    <td>" . $note_row['machine_name'] . "</td>
-                    <td>" . $note_row['temperature'] . " °C</td>
-                    <td>" . $note_row['humidity'] . " %</td>
-                  </tr>";
+    $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
+    
+    try {
+        $notes_result = $conn->query($sql_notes);
+        
+        if ($notes_result->num_rows > 0) {
+            while ($note_row = $notes_result->fetch_assoc()) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($note_row['id']) . "</td>
+                        <td>" . htmlspecialchars($note_row['timestamp']) . "</td>
+                        <td>" . htmlspecialchars($note_row['machine_name']) . "</td>
+                        <td>" . htmlspecialchars($note_row['temperature']) . " °C</td>
+                        <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
+                        <td>" . htmlspecialchars($note_row['notes']) . "</td> <!-- Updated here -->
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='6'>No notes available</td></tr>";
         }
-    } else {
-        echo "<tr><td colspan='5'>No notes available</td></tr>";
+    } catch (Exception $e) {
+        logError("Error fetching notes: " . $e->getMessage());
+        echo "<tr><td colspan='6'>Error fetching notes. Please check the logs.</td></tr>";
     }
     ?>
 </table>

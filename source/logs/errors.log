@@ -31,3 +31,5 @@
 [2024-10-20 07:04:26] Error: User logged in successfully: admin
 [2024-10-20 07:04:46] Error: User logged in successfully: productionoperator
 [2024-10-20 09:24:54] Error: User logged in successfully: productionoperator
+[2024-10-20 09:56:45] Error: Error fetching notes: Unknown column 'note' in 'field list'
+[2024-10-20 09:57:46] Error: Exception caught: Unknown column 'note' in 'field list'
