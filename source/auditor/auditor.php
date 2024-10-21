@@ -1,10 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'auditor') {
-    header("Location: ../home/login.php");
-    exit();
-}
+require '../home/auth_check.php';
+checkUserRole('auditor');
 
 require '../config/config.php';
 

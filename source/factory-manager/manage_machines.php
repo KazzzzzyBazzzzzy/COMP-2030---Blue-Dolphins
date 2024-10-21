@@ -3,6 +3,7 @@
 session_start();
 require '../home/auth_check.php';
 checkUserRole('factorymanager');
+
 require '../config/config.php';
 
 
