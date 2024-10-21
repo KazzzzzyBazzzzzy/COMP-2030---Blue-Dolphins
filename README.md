@@ -43,6 +43,11 @@ This prototype will use log data provided-so-called `factory_logs.csv`-historica
 - Notifications concerning important updates that may arise.
 - Large buttons, light to click in order to enhance usability on the factory floor.
 
+## License
+
+This project is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+
+
 ## Installation
 
 1. Clone this repository:
