@@ -101,7 +101,7 @@ try {
 <h1>Manage Users</h1>
 <div id="admin-select">
     <ul>
-        <li><a href="../administrator/administrator_dashboard.php"><button>Admin Dashboard</button></a></li>
+        <li><a href="administrator.php"><button>Admin Dashboard</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
 </div>
