@@ -1,10 +1,1 @@
-[2024-10-20 16:50:28] Error: User logged in successfully: factorymanager
-[2024-10-20 16:50:38] Error: Database connection failed: Unknown column 'jobs.Employee' in 'order clause'
-[2024-10-20 16:50:55] Error: Database connection failed: Unknown column 'jobs.Employee' in 'order clause'
-[2024-10-20 16:51:39] Error: User logged in successfully: auditor
-[2024-10-20 17:10:59] Error: User logged in successfully: auditor
-[2024-10-20 17:25:47] Error: User logged in successfully: auditor
-[2024-10-20 17:38:52] Error: Invalid username or password.
-[2024-10-20 17:39:13] Error: User logged in successfully: auditor
-[2024-10-20 18:08:37] Error: User logged in successfully: auditor
-[2024-10-20 18:38:25] Error: User logged in successfully: auditor
+[2024-10-20 16:09:19] Error: User logged in successfully: productionoperator
