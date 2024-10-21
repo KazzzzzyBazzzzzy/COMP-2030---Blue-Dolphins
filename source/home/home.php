@@ -14,7 +14,7 @@
     <div id="page-select">
         <ul>
             <li><a href="../administrator/administrator.php"><button>Admin</button></a></li>
-            <li><a href="#"><button>Auditor</button></a></li>
+            <li><a href="../auditor/auditor.php"><button>Auditor</button></a></li>
             <li><a href="../factory-manager/factory-manager.php"><button>Factory Manager</button></a></li>
             <li><a href="../production-operator/production-operator.php"><button>Production Operator</button></a></li>
         </ul>
