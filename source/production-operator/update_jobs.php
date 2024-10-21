@@ -1,9 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
-    header("Location: ../home/login.php");
-    exit();
-}
+require '../home/auth_check.php';
+checkUserRole('productionoperator');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,3 +31,4 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'productionoperator') {
 
 session_start();
 require '../config/config.php';
+?>
