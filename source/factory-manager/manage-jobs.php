@@ -1,76 +1,53 @@
-<!--This script enables basic job management functionality for a factory manager, including listing jobs,
-deleting them, and updating their descriptions.-->
-
 <?php
-// DATABASE SET UP
-//----------------------------------------------------------------------------------------------------------------------
+session_start();
+require '../home/auth_check.php';
+checkUserRole('factorymanager');
 
-session_start(); // Starts a new session or resumes an existing one
-
-// Checks if the user_id session variable is set and whether the logged-in user has the correct role.
-// If not, the user is redirected to the login page and the script execution is stopped.
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'factorymanager') {
-    header("Location: ../home/login.php");
-    exit();
-}
-
-// Load the config file which contains the database connection settings
 require '../config/config.php';
 
-// Function for logging errors to a file, each error is logged with the current date and time
 function logError($errorMessage) {
-    $logFile = '../logs/errors.log'; // Path to the log file
-    $currentDateTime = date('Y-m-d H:i:s'); // Get the current date and time
-    file_put_contents($logFile, "[$currentDateTime] Error: $errorMessage" . PHP_EOL, FILE_APPEND); // Append the error message to the log file
+    $logFile = '../logs/errors.log';
+    $currentDateTime = date('Y-m-d H:i:s');
+    file_put_contents($logFile, "[$currentDateTime] Error: $errorMessage" . PHP_EOL, FILE_APPEND);
 }
 
-// Enable error reporting for MySQLi so that it throws exceptions in case of database issue
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-//----------------------------------------------------------------------------------------------------------------------
 
-
-// DATABASE OPERATIONS
-//----------------------------------------------------------------------------------------------------------------------
 try {
-    // Check if there is a connection error
     if ($conn->connect_error) {
-        logError("Connection failed: " . $conn->connect_error); // Log the connection error
-        die("Connection failed. Please try again later."); // Terminate the script and display an error message
+        logError("Connection failed: " . $conn->connect_error);
+        die("Connection failed. Please try again later.");
     }
 
-    // Delete job if delete_id is set
     if (isset($_GET['delete_id'])) {
         $delete_id = $_GET['delete_id'];
         $sql = "DELETE FROM `jobs` WHERE `jobs`.`job-id` = '$delete_id'";
         $conn->query($sql);
-        header("Location: manage-jobs.php"); // Reload page
+        header("Location: manage-jobs.php");
         exit();
     }
 
     // Update job if update_job is set
     if (isset($_POST['update_job'])) {
-        $jobId = $_POST['edit_job_id']; // Get job id from hidden form field
-        $jobDescription = $_POST['edit_job_name']; // Retrieve updated job description
+        $jobId = $_POST['edit_job_id'];
+        $jobDescription = $_POST['edit_job_name'];
 
-        // SQL query to edit job description
         $sql = "UPDATE `jobs` SET `Jobs-Description` = '$jobDescription' WHERE `job-id` = '$jobId'";
         $conn->query($sql);
-        echo "Job updated successfully."; // Display a success message
+        echo "Job updated successfully.";
     }
 
-    // Insert new job if the request method is POST and update_job is not set
     if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['update_job'])) {
         $employee = $_POST['employee'];
         $machine = $_POST['machine'];
         $jobsDescription = $_POST['job_name'];
 
-        // SQL query to insert new job
         $sql = "INSERT INTO jobs (Employee, Machine, `Jobs-Description`) VALUES ('$employee', '$machine', '$jobsDescription')";
         $conn->query($sql);
-        echo "New job added successfully."; // Display a success message
+        echo "New job added successfully.";
     }
 
-    // Fetch employees from the job table in order to populate the dropdown list
+
     $sql = "SELECT * FROM `jobs` ORDER BY `jobs`.`Employee` ASC";
     $result = $conn->query($sql);
 
@@ -81,7 +58,6 @@ try {
         }
     }
 
-    // Fetch machines from the job table in order to populate the dropdown list
     $sql = "SELECT * FROM `jobs` ORDER BY `jobs`.`Machine` ASC";
     $result = $conn->query($sql);
 
@@ -92,18 +68,16 @@ try {
         }
     }
 
-    // Fetch existing jobs
     $sql = "SELECT * FROM jobs";
     $existingJobs = $conn->query($sql);
 
 } catch (mysqli_sql_exception $e) {
-    logError("Database connection failed: " . $e->getMessage()); // Log the database connection error
-    echo "Error occurred. Please check the logs."; // Display an error message
+    logError("Database connection failed: " . $e->getMessage()); 
+    echo "Error occurred. Please check the logs."; 
 }
-//----------------------------------------------------------------------------------------------------------------------
+
 ?>
 
-<!--Set up HTML-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -128,7 +102,7 @@ try {
         </ul>
     </div>
 
-    <!--Form to add a new job-->
+
     <h2>Add a Job</h2>
     <form method="post" class="job-form">
         <label for="employee"></label>
@@ -155,8 +129,6 @@ try {
         </div>
     </form>
 
-    <!--DISPLAY CURRENT JOBS-->
-    <!--------------------------------------------------------------------------------------------------------------------->
     <h2>Current Jobs</h2>
     <table class="jobs-table">
         <tr>
@@ -169,7 +141,6 @@ try {
         <?php
         if ($existingJobs && $existingJobs->num_rows > 0) {
             while ($row = $existingJobs->fetch_assoc()) {
-                // Output a table with job details
                 echo "<tr>
                         <td>{$row['Employee']}</td>
                         <td>{$row['Machine']}</td>
@@ -183,17 +154,14 @@ try {
                       </tr>";
             }
         } else {
-            // If no jobs are found, display message
+
             echo "<tr><td colspan='4'>No jobs found.</td></tr>";
         }
         ?>
     </table>
-    <!----------------------------------------------------------------------------------------------------------------->
 
-    <!--Editing Jobs-->
-    <!----------------------------------------------------------------------------------------------------------------->
     <script>
-        // Fill the form field with the updated values
+
         function editJob(employee, machine, jobDescription, jobId) {
             document.getElementById('edit_employee').value = employee;
             document.getElementById('edit_machine').value = machine;
@@ -203,7 +171,7 @@ try {
         }
     </script>
 
-    <!--Edit form for when 'edit' is clicked-->
+
     <div id="edit-job-form" style="display:none;">
         <h2>Edit Job</h2>
         <form method="post" class="job-form">
@@ -222,9 +190,9 @@ try {
             </div>
         </form>
     </div>
-    <!----------------------------------------------------------------------------------------------------------------->
+
 
 </body>
 </html>
 
-<?php $conn->close(); ?> <!-- Close the database connection -->
+<?php $conn->close(); ?>

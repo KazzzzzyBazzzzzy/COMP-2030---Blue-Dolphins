@@ -1,9 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'factorymanager') {
-    header("Location: ../home/login.php");
-    exit();
-}
+require '../home/auth_check.php';
+checkUserRole('factorymanager');
 ?>
 <!DOCTYPE html>
 <html lang="en">
