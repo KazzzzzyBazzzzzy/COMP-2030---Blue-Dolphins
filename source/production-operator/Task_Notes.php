@@ -26,7 +26,7 @@ try {
 
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
-    // Calculate the starting record
+
     $start_from = ($page - 1) * $records_per_page;
 
     $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY timestamp LIMIT $start_from, $records_per_page";
@@ -75,7 +75,7 @@ try {
     $total_result = $conn->query($total_sql);
     $total_rows = $total_result->fetch_array()[0];
 
-    // Calculate the total number of pages
+
     $total_pages = ceil($total_rows / $records_per_page);
 
 } catch (Exception $e) {
