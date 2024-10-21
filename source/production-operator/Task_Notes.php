@@ -112,7 +112,7 @@ try {
     <ul>
         <li><a href="#"><button>Monitor Factory Performance</button></a></li>
         <li><a href="#"><button>Update Machines</button></a></li>
-        <li><a href="../production-operator/update_jobs.php"><button>Update Jobs</button></a></li>
+        <li><a href="#"><button>Update Jobs</button></a></li>
         <li><a href="../production-operator/task_notes.php"><button>Manage Task Notes</button></a></li>
         <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
     </ul>
