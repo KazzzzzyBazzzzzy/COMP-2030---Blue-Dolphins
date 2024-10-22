@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function getDashboardUrl($role) {
     switch (strtolower($role)) {
         case 'admin':
-            return '../administrator/administrator_dashboard.php';
+            return '../administrator/administrator.php';
         case 'factorymanager':
             return '../factory-manager/factory-manager.php';
         case 'productionoperator':

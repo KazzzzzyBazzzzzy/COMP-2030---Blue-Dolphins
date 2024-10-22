@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Your Name" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/manage_users.css">
+    <link rel="stylesheet" type="text/css" href="../css/logout.css">
+    <script src="../javascript/manage_users.js"></script>
+    <title>Manage Users Home</title>
+</head>
+<body>
+<h1>Manage Users</h1>
+<div id="admin-select">
+    <ul>
+        <li><a href="administrator.php"><button>Admin Dashboard</button></a></li>
+        <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
+    </ul>
+</div>
+
+<h2>Add / Update User</h2>
+<form method="post" class="user-form">
+    <input type="hidden" name="original_id" id="original_id" value="" required>
+    <label for="user_id">User ID:</label>
+    <input type="text" name="user_id" id="user_id" value="" required>
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" required>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required>
+    <label for="role">Role:</label>
+    <select name="role" id="role" required>
+        <option value="admin">Admin</option>
+        <option value="factorymanager">Factory Manager</option>
+        <option value="productionoperator">Production Operator</option>
+        <option value="auditor">Auditor</option>
+    </select>
+
+    <div class="form-buttons">
+        <button type="submit" name="add_user" class="add-button">Add User</button>
+        <button type="submit" name="update_user" class="update-button">Update User</button>
+    </div>
+</form>
+
+<h2>Existing Users</h2>
+<table class="users-table">
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    <?php if (isset($result) && $result->num_rows > 0): ?>
+        <?php while($row = $result->fetch_assoc()): ?>
+            <tr>
+                <td><?php echo $row['id']; ?></td>
+                <td><?php echo $row['username']; ?></td>
+                <td><?php echo $row['role']; ?></td>
+                <td>
+                    <a href="#" onclick="editUser('<?php echo $row['id']; ?>', '<?php echo $row['username']; ?>', '<?php echo $row['role']; ?>')">Edit</a>
+                    <a href="?delete_id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                </td>
+            </tr>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="4">No users found.</td>
+        </tr>
+    <?php endif; ?>
+</table>
+</body>
+</html>
