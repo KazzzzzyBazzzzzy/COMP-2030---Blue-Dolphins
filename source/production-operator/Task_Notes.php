@@ -3,7 +3,6 @@ session_start();
 require '../home/auth_check.php';
 checkUserRole('productionoperator');
 
-
 require '../config/config.php';
 
 function logError($errorMessage) {
@@ -20,14 +19,11 @@ try {
         die("Connection failed. Please try again later.");
     }
 
-
     $records_per_page = 10;
-
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-
     $start_from = ($page - 1) * $records_per_page;
 
+    // Get factory logs
     $sql = "SELECT timestamp, machine_name, temperature, humidity FROM factory_logs ORDER BY timestamp LIMIT $start_from, $records_per_page";
     $result = $conn->query($sql);
 
@@ -70,187 +66,20 @@ try {
         }
     }
 
+    // Get total number of pages
     $total_sql = "SELECT COUNT(*) FROM factory_logs";
     $total_result = $conn->query($total_sql);
     $total_rows = $total_result->fetch_array()[0];
-
-
     $total_pages = ceil($total_rows / $records_per_page);
+
+    // Fetch notes
+    $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
+    $notes_result = $conn->query($sql_notes);
 
 } catch (Exception $e) {
     logError("Exception caught: " . $e->getMessage());
     die("An error occurred. Please try again later.");
 }
+
+include '../production-operator/temp/task_notes_layout.html';
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="author" content="Daniel Rosich, Samuel Ngiri" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../css/global.css">
-    <link rel="stylesheet" type="text/css" href="../css/task_notes.css">
-    <link rel="stylesheet" type="text/css" href="../css/logout.css">
-    <title>Production Operator Home</title>
-    <style>
-        .fade-in {
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
-</head>
-<body>
-<h1>Production Operator Home</h1>
-<div id="production-operator-select">
-    <ul>
-        <li><a href="#"><button>Monitor Factory Performance</button></a></li>
-        <li><a href="#"><button>Update Machines</button></a></li>
-        <li><a href="#"><button>Update Jobs</button></a></li>
-        <li><a href="../production-operator/task_notes.php"><button>Manage Task Notes</button></a></li>
-        <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
-    </ul>
-</div>
-
-<h2>Factory Logs</h2>
-
-
-<nav class="pagination-container">
-    <?php if ($page > 1): ?>
-        <a class="pagination-button" href="?page=1">First</a>
-    <?php endif; ?>
-
-    <?php if ($page > 1): ?>
-        <a class="pagination-button" href="?page=<?php echo $page - 1; ?>">Previous</a>
-    <?php endif; ?>
-
-    <div id="pagination-numbers">
-        <?php 
-
-        $start_page = max(1, $page - 5);
-        $end_page = min($total_pages, $start_page + 9);
-
-
-        if ($end_page - $start_page < 9) {
-            $start_page = max(1, $end_page - 9);
-        }
-
-        for ($i = $start_page; $i <= $end_page; $i++): ?>
-            <a class="pagination-number <?php if($page == $i) echo 'active'; ?>" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
-        <?php endfor; ?>
-    </div>
-
-
-    <?php if ($page < $total_pages): ?>
-        <a class="pagination-button" href="?page=<?php echo $page + 1; ?>">Next</a>
-    <?php endif; ?>
-
-
-    <?php if ($page < $total_pages): ?>
-        <a class="pagination-button" href="?page=<?php echo $total_pages; ?>">Last</a>
-    <?php endif; ?>
-</nav>
-
-
-
-
-
-<table id="factory-logs" border="1">
-    <thead>
-        <tr>
-            <th>Timestamp</th>
-            <th>Machine Name</th>
-            <th>Temperature (°C)</th>
-            <th>Humidity (%)</th>
-            <th>Notes</th>
-            <th>Add Notes</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>
-                    <td>" . htmlspecialchars($row['timestamp']) . "</td>
-                    <td>" . htmlspecialchars($row['machine_name']) . "</td>
-                    <td>" . htmlspecialchars($row['temperature']) . " °C</td>
-                    <td>" . htmlspecialchars($row['humidity']) . " %</td>
-                    <td>
-                        <form method='POST' class='note-form'>
-                            <input type='hidden' name='timestamp' value='" . htmlspecialchars($row['timestamp']) . "' />
-                            <input type='hidden' name='machine_name' value='" . htmlspecialchars($row['machine_name']) . "' />
-                            <input type='hidden' name='temperature' value='" . htmlspecialchars($row['temperature']) . "' />
-                            <input type='hidden' name='humidity' value='" . htmlspecialchars($row['humidity']) . "' />
-                            <div class='textarea-button-container'>
-                                <textarea name='note' placeholder='Add your notes here...' required></textarea>
-                            </div>
-                    </td>
-                    <td><button type='submit' name='submit_note'>Add Note</button> </td>
-                    </form>
-                  </tr>";
-        }
-    } else {
-        echo "<tr><td colspan='6'>No logs available</td></tr>";
-    }
-    ?>
-    </tbody>
-</table>
-
-<h2>Notes</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Timestamp</th>
-            <th>Machine Name</th>
-            <th>Temperature (°C)</th>
-            <th>Humidity (%)</th>
-            <th>Note</th>
-            <th>Actions</th>
-            <th>Edit Note</th>
-        </tr>
-    </thead>
-    <tbody id="notes-table">
-        <?php
-        $sql_notes = "SELECT id, timestamp, machine_name, temperature, humidity, notes FROM notes";
-        try {
-            $notes_result = $conn->query($sql_notes);
-            if ($notes_result->num_rows > 0) {
-                while ($note_row = $notes_result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>" . htmlspecialchars($note_row['id']) . "</td>
-                            <td>" . htmlspecialchars($note_row['timestamp']) . "</td>
-                            <td>" . htmlspecialchars($note_row['machine_name']) . "</td>
-                            <td>" . htmlspecialchars($note_row['temperature']) . " °C</td>
-                            <td>" . htmlspecialchars($note_row['humidity']) . " %</td>
-                            <td>" . htmlspecialchars($note_row['notes']) . "</td>
-                            <form method='POST' class='edit-form'>
-                            <td>
-                                    <input type='hidden' name='note_id' value='" . htmlspecialchars($note_row['id']) . "' />
-                                    <div class='textarea-button-container'>
-                                        <textarea name='new_note' required>" . htmlspecialchars($note_row['notes']) . "</textarea>
-                                    </div>
-                                </td>
-                                <td>
-                                    <button type='submit' name='edit_note'>Edit Note</button>
-                                </td>
-                             </form>
-                          </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7'>No notes available</td></tr>";
-            }
-        } catch (Exception $e) {
-            logError("Error fetching notes: " . $e->getMessage());
-            echo "<tr><td colspan='7'>Error fetching notes. Please check the logs.</td></tr>";
-        }
-        ?>
-    </tbody>
-</table>
-</body>
-</html>
