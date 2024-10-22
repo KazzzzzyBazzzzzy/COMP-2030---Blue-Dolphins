@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Daniel Rosich" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/manage_machines.css">
+    <link rel="stylesheet" type="text/css" href="../css/logout.css">
+    <title>Manage Machines Home</title>
+</head>
+<body>
+    <h1>Manage Machines Home</h1>
+    <div id="factory-manager-select">
+        <ul>
+            <li><a href="#"><button>Monitor Factory Performance</button></a></li>
+            <li><a href="../factory-manager/manage-jobs.php"><button>Manage Jobs</button></a></li>
+            <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li>
+            <li><a href="#"><button>Assign Roles</button></a></li>
+            <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
+        </ul>
+    </div>
+
+    <h2>Add / Update Machine</h2>
+    <form method="post" class="machine-form">
+        <input type="hidden" name="original_id" id="original_id" value="">
+        <label for="machine_id">Machine ID:</label>
+        <input type="text" name="machine_id" id="machine_id" value="" required>
+        <label for="machine_name">Machine Name:</label>
+        <input type="text" name="machine_name" id="machine_name" required>
+
+        <div class="form-buttons">
+            <button type="submit" name="add_machine" class="add-button">Add Machine</button>
+            <button type="submit" name="update_machine" class="update-button">Update Machine</button>
+        </div>
+    </form>
+
+    <h2>Existing Machines</h2>
+    <table class="machines-table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        {{machineRows}}
+    </table>
+
+</body>
+</html>
