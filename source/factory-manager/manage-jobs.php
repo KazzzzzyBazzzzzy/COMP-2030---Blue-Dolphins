@@ -5,7 +5,9 @@ deleting them, and updating their descriptions.-->
 // DATABASE SET UP
 //----------------------------------------------------------------------------------------------------------------------
 
-session_start(); // Starts a new session or resumes an existing one
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Starts a new session or resumes an existing one only if one is not already active
+}
 
 // Checks if the user_id session variable is set and whether the logged-in user has the correct role.
 // If not, the user is redirected to the login page and the script execution is stopped.
@@ -13,7 +15,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'factorymanager') {
     header("Location: ../home/login.php");
     exit();
 }
-session_start();
+
 require '../home/auth_check.php';
 checkUserRole('factorymanager');
 
