@@ -7,13 +7,13 @@ checkUserRole('productionoperator');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="author" content="Daniel Rosich" />
+    <meta name="author" content="Samuel Ngiri" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../css/global.css">
     <link rel="stylesheet" type="text/css" href="../css/logout.css">
-    <title>Production Operator Home</title>
+    <title>Update machines</title>
 </head>
-<h1>Production Operator Home</h1>
+<h1>Update machines assigned to production operators</h1>
 <body>
 <div id="production-operator-select">
     <ul>
