@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Samuel Ngiri" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/update_machines.css">
+    <link rel="stylesheet" type="text/css" href="../css/logout.css">
+    <title>Update Machines</title>
+</head>
+<body>
+    <h1>Update Machines Assigned to Production Operators</h1>
+    <div id="production-operator-select">
+        <ul>
+            <li><a href="#"><button>Monitor Factory Performance</button></a></li>
+            <li><a href="../production-operator/update_machines.php"><button>Update Machines</button></a></li>
+            <li><a href="#"><button>Update Jobs</button></a></li>
+            <li><a href="../production-operator/task_notes.php"><button>Manage Task Notes</button></a></li>
+            <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
+        </ul>
+    </div>
+    
+    <h2>Update Machine Assignment</h2>
+    <form method="post" class="machine-form">
+        <label for="job_id">Job ID:</label>
+        <input type="text" name="job_id" id="job_id" value="" required>
+        
+        <label for="machine_name">Machine Name:</label>
+        <select name="machine_name" id="machine_name" required>
+            {{machineOptions}}
+        </select>
+
+        <div class="form-buttons">
+            <button type="submit" class="update-button">Update Machine</button>
+        </div>
+    </form>
+
+    <h2>Existing Job Assignments</h2>
+    <table class="jobs-table">
+        <tr>
+            <th>Job-ID</th>
+            <th>Employee</th>
+            <th>Machine</th>
+            <th>Actions</th>
+        </tr>
+        {{jobRows}}
+    </table>
+
+    <script src="../javascript/update_machines.js"></script>
+</body>
+</html>
