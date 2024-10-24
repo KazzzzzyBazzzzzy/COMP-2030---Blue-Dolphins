@@ -1,0 +1,88 @@
+.machine-form {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 400px;
+}
+
+.machine-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.machine-form input, .machine-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+.form-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.update-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.update-button:hover {
+    background-color: #45a049;
+}
+
+
+.jobs-table {
+    width: 80%;
+    max-width: 800px;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: white;
+    border: 2px solid black;
+}
+
+.jobs-table th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    border: 2px solid black;
+}
+
+.jobs-table td {
+    padding: 15px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: white;
+}
+
+.jobs-table tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.jobs-table th:hover {
+    background-color: #3e8e41;
+}
+
+.jobs-table td a {
+    margin-right: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.jobs-table td a:hover {
+    text-decoration: underline;
+}
+
+.jobs-table tr td {
+    font-style: italic;
+}
