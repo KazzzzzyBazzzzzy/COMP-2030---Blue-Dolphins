@@ -1,5 +1,4 @@
 function editJob(jobId, jobDescription) {
-    // Pre-fill the form with the job information when the user clicks "Edit"
     document.getElementById('job_id').value = jobId;
     document.getElementById('job_description').value = jobDescription;
 }

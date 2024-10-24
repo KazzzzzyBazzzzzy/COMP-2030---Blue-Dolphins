@@ -1,22 +1,5 @@
-[2024-10-20 16:09:19] Error: User logged in successfully: productionoperator
-[2024-10-21 03:51:33] Error: User logged in successfully: auditor
-[2024-10-21 03:54:30] Error: User logged in successfully: productionoperator
-[2024-10-21 04:02:50] Error: Invalid username or password.
-[2024-10-21 04:03:18] Error: User logged in successfully: auditor
-[2024-10-21 05:59:24] Error: User logged in successfully: auditor
-[2024-10-21 06:13:17] Error: User logged in successfully: auditor
-[2024-10-21 06:13:34] Error: User logged in successfully: auditor
-[2024-10-21 06:14:16] Error: User logged in successfully: auditor
-[2024-10-21 06:15:30] Error: User logged in successfully: auditor
-[2024-10-21 06:59:54] Error: Invalid date format provided.
-[2024-10-22 00:58:41] Error: User logged in successfully: productionoperator
-[2024-10-22 02:25:40] Error: User logged in successfully: factorymanager
-[2024-10-22 06:34:17] Error: User logged in successfully: admin
-[2024-10-22 06:36:57] Error: User logged in successfully: admin
-[2024-10-24 00:43:40] Error: User logged in successfully: factorymanager
-[2024-10-24 01:19:33] Error: User logged in successfully: productionoperator
-[2024-10-24 01:29:53] Error: User logged in successfully: factorymanager
-[2024-10-24 01:42:57] Error: User logged in successfully: factorymanager
-[2024-10-24 01:50:02] Error: User logged in successfully: productionoperator
-[2024-10-24 08:43:08] Error: User logged in successfully: factorymanager
-[2024-10-24 08:55:24] Error: User logged in successfully: productionoperator
+[2024-10-24 10:03:50] Error: User logged in successfully: admin
+[2024-10-24 10:04:52] Error: User logged in successfully: factorymanager
+[2024-10-24 10:07:52] Error: User logged in successfully: productionoperator
+[2024-10-24 10:10:09] Error: User logged in successfully: auditor
+[2024-10-24 10:26:33] Error: User logged in successfully: factorymanager

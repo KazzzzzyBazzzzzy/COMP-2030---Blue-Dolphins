@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Samuel Ngiri" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/global.css">
+    <link rel="stylesheet" type="text/css" href="../css/assign_roles.css">
+    <link rel="stylesheet" type="text/css" href="../css/logout.css">
+    <title>Assign Roles</title>
+</head>
+<body>
+    <h1>Assign Roles to Production Operators</h1>
+    <div id="factory-manager-select">
+        <ul>
+            <li><a href="#"><button>Monitor Factory Performance</button></a></li>
+            <li><a href="../factory-manager/manage-jobs.php"><button>Manage Jobs</button></a></li>
+            <li><a href="../factory-manager/manage_machines.php"><button>Manage Machines</button></a></li>
+            <li><a href="../factory-manager/assign_roles.php"><button>Assign Roles</button></a></li>
+            <button class="logout-button" onclick="window.location.href='../home/logout.php'">Logout</button>
+        </ul>
+    </div>
+    
+    <h2 id="form-title">Add New Job</h2>
+    <form method="post" class="job-description-form">
+        <input type="hidden" name="action" value="add">
+        <input type="hidden" name="job_id" id="job_id" value="">
+        
+        <label for="employee">Employee Name:</label>
+        <input type="text" name="employee" id="employee" required>
+    
+        <label for="machine">Select Machine:</label>
+        <select name="machine" id="machine" required>
+            <option value="">Select Machine</option>
+            {{machinesOptions}}
+        </select>
+    
+        <label for="jobs_description">Job Description:</label>
+        <textarea name="jobs_description" id="jobs_description" required></textarea>
+    
+        <div class="form-buttons">
+            <button type="submit" class="submit-button">Add Job</button>
+        </div>
+    </form>
+    
+    <h2>Existing Job Descriptions</h2>
+    <table class="jobs-table">
+        <thead>
+            <tr>
+                <th>Job ID</th>
+                <th>Employee</th>
+                <th>Machine</th>
+                <th>Jobs Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{jobRows}}
+        </tbody>
+    </table>
+
+    <script src="../javascript/assign_roles.js"></script>
+</body>
+</html>
